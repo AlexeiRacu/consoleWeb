@@ -2,7 +2,7 @@
 using Npgsql;
 namespace dataRequests
 {
-    class readInfo
+    class data
     {
         static readonly string conString = "Host=127.0.0.1;Port=5432;Database=postgres;Username=postgres;Password=1510;Timeout=10;SslMode=Prefer";
 
@@ -34,12 +34,23 @@ namespace dataRequests
                 {
                     userInfo += $"Root права: {reader["user_root"]}, ";
                 }
+                connect.Close();
                 return userInfo.TrimEnd(' ', ',');
             }
             else
             {
                 return "Несуществующий пользователь!";
             }
+        }
+        public static void createUser(string name, string password, bool root = false)
+        {
+            var connect = new NpgsqlConnection(conString);
+            connect.Open();
+            var cmd = connect.CreateCommand();
+            cmd.CommandText = "INSERT INTO users (user_name, user_password, user_root) " +
+                             $"VALUES ('{name}', '{password}', 'false');";
+            connect.Close();
+
         }
     }
 }

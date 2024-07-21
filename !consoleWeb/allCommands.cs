@@ -1,4 +1,6 @@
-﻿using visual;
+﻿using dataRequests;
+using System.ComponentModel.DataAnnotations;
+using visual;
 
 namespace allCommands
 {
@@ -73,7 +75,29 @@ namespace allCommands
 
         private static void registerCommand()
         {
-            // Логика для команды Register
+            customWrite.write("Придумайте ник: ");
+            string name = Console.ReadLine();
+            if (name.Length > 16 || name == "") 
+            {
+                customWrite.writeLine("Ваш ник должен содержать от 1 до 16 символов!");
+            }
+            else
+            {
+                customWrite.write("Придумайте пароль: ");
+                string password = Console.ReadLine();
+                if (password.Length > 32 || password.Length < 6)
+                {
+                    Console.WriteLine("Ваш пароль должен содержать от 6 до 32 символов!");
+                }
+                else 
+                {
+                    customWrite.writeLine("Аккаунт успешно создан!");
+                    data.createUser(name, password);
+                    string user = data.readUsers(2);
+                    Console.WriteLine(user);
+                }
+            }
+
         }
 
         private static void deleteAccountCommand()
@@ -118,7 +142,7 @@ namespace allCommands
         private static void reSpeedCommand()
         {
             customWrite.write("Выберите скорость (0, fast, normal, slow): ");
-            string request = Console.ReadLine();
+            string request = Console.ReadLine().ToLower();
             customWrite.setSpeed(request);
         }
     }
