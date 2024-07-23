@@ -42,25 +42,14 @@ namespace dataRequests
                 return "Несуществующий пользователь!";
             }
         }
-        public static void createUser(string name, string password, string root = "false")
+        public static void createUser(string login, string name, string password, string root = "false")
         {
             var connect = new NpgsqlConnection(conString);
             connect.Open();
             var cmd = connect.CreateCommand();
-            cmd.CommandText = "INSERT INTO users (user_name, user_password, user_root) VALUES(@name, @password, @root)";
-
-            // Преобразование значения root в логическое значение
-            bool rootBool = root.ToLower() == "true";
-
-            // Добавление параметров запроса
-            cmd.Parameters.AddWithValue("name", name);
-            cmd.Parameters.AddWithValue("password", password);
-            cmd.Parameters.AddWithValue("root", rootBool);
-
-            // Выполнение запроса на вставку данных
+            cmd.CommandText = $"INSERT INTO users (user_login, user_name, user_password, user_root) VALUES('{login}','{name}', '{password}', {(root.ToLower())})";
             cmd.ExecuteNonQuery();
-
-            connect.Close();
         }
+
     }
 }
