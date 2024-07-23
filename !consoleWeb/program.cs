@@ -1,7 +1,5 @@
-﻿using allCommands;
+using allCommands;
 using visual;
-
-using dataRequests;//удалить
 
 namespace _consoleWeb
 {
@@ -10,10 +8,7 @@ namespace _consoleWeb
         static void Main()
         {
             Console.ForegroundColor = ConsoleColor.White;
-            customWrite.write("/help для подсказки" +
-                "\nadmin data:\n"); //admin data удалить
-            string userAdmin = readInfo.readUsers(1, "1101"); //1
-            customWrite.writeLine(userAdmin); //2
+            customWrite.writeLine("/help для подсказки");
             while (true)
             {
 
@@ -22,7 +17,7 @@ namespace _consoleWeb
                 {
                     customWrite.writeLine("Используйте '/' для оринтирования в программе!");
                 }
-                else 
+                else
                 {
                     mainCommands.identifyCommand(request);
                 }
