@@ -52,4 +52,40 @@ namespace dataRequests
         }
 
     }
+    class dataChek
+    {
+        public static bool chekConditions(string user_data, params string[] parameter)
+        {
+            bool isCheckPassed = true; // Начальное состояние успешного прохождения проверки
+
+            for (int i = 0; i < parameter.Length; i++)
+            {
+                string[] parts = parameter[i].Split(';');
+                string key = parts[0].ToLower();
+                string value = parts[1];
+                switch (key)
+                {
+                    case "maxlength":
+                        if (user_data.Length > int.Parse(value))
+                        {
+                            isCheckPassed = false; // Условие не выполняется
+                            return isCheckPassed;
+                        }
+                        break;
+                    case "minlength":
+                        if (user_data.Length < int.Parse(value))
+                        {
+                            isCheckPassed = false; // Условие не выполняется
+                            return isCheckPassed;
+                        }
+                        break;
+                    default:
+                        return false; // Неизвестное условие
+                }
+            }
+
+            return isCheckPassed; // Возвращаем результат проверки всех условий
+        }
+
+    }
 }
