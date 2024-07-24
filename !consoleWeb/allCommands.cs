@@ -2,7 +2,6 @@ using _consoleWeb;
 using dataRequests;
 using System.Xml.Linq;
 using visual;
-
 namespace allCommands
 {
     class mainCommands
@@ -83,18 +82,20 @@ namespace allCommands
             customWrite.write("Логин для входа: ");
             string login = Console.ReadLine();
             //проверка на соответсвие стандартам
-            if (dataChek.chekConditions(login, "minlength;4", "maxlength;16") == false)
+            if (dataChek.chekConditions(login, "minlength;4", "maxlength;16", "uniq;login"))
             {
-                customWrite.writeLine("Минимальная длинна логина 4 символа, максимальная 16!");
+                customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к логину пользователя:");
+                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tДолжен быть уникальным для каждого пользователя");
                 program.Main();
             }
             //запрос на создание имени профиля
             customWrite.write("Имя профиля: ");
             string name = Console.ReadLine();
             //проверка на соответсвие стандартам
-            if (dataChek.chekConditions(name, "minlength;4", "maxlength;16") == false)
+            if (dataChek.chekConditions(name, "minlength;4", "maxlength;16"))
             {
-                customWrite.writeLine("Минимальная длинна имени 4 символа, максимальная 16!");
+                customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к имени пользователя:");
+                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов");
                 program.Main();
             }
 
@@ -102,9 +103,10 @@ namespace allCommands
             customWrite.write("Пароль для входа: ");
             string password = Console.ReadLine();
             //проверка на соответсвие стандартам
-            if (dataChek.chekConditions(password, "minlength;8", "maxlength;32") == false)
+            if (dataChek.chekConditions(password, "minlength;8", "maxlength;32"))
             {
-                customWrite.writeLine("Минимальная длинна пароля 4 символа, максимальная 32!");
+                customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к паролю пользователя:");
+                customWrite.writeLine("\tМинимальная длинна 8 символов\n\tМаксимальная длинна 32 символов");
                 program.Main();
             }
 
