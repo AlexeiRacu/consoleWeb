@@ -1,10 +1,13 @@
+using _consoleWeb;
 using dataRequests;
+using System.Xml.Linq;
 using visual;
 
 namespace allCommands
 {
     class mainCommands
     {
+        string[] args = { "withoutPromt", "withPromt" };
         public static void identifyCommand(string command)
         {
             command = command.ToLower();
@@ -58,6 +61,7 @@ namespace allCommands
             customWrite.writeLine("Наслаждайтесь эффективностью и простотой социальной сети !console");
             customWrite.writeLine("/mainСommands - Показать все доступные команды и их описание");
         }
+
         private static void mainCommandsCommand()
         {
             customWrite.writeLine("/reSpeed - Изменить скорость вывода текста в консоль");
@@ -74,29 +78,40 @@ namespace allCommands
 
         private static void registerCommand()
         {
-            customWrite.write("Придумайте ник: ");
-            string name = Console.ReadLine();
-            if (name.Length > 16 || name == "")
+
+            //запрос на создание логина
+            customWrite.write("Логин для входа: ");
+            string login = Console.ReadLine();
+            //проверка на соответсвие стандартам
+            if (dataChek.chekConditions(login, "minlength;4", "maxlength;16") == false)
             {
-                customWrite.writeLine("Ваш ник должен содержать от 1 до 16 символов!");
+                customWrite.writeLine("Минимальная длинна логина 4 символа, максимальная 16!");
+                program.Main();
             }
-            else
+            //запрос на создание имени профиля
+            customWrite.write("Имя профиля: ");
+            string name = Console.ReadLine();
+            //проверка на соответсвие стандартам
+            if (dataChek.chekConditions(name, "minlength;4", "maxlength;16") == false)
             {
-                customWrite.write("Придумайте пароль: ");
-                string password = Console.ReadLine();
-                if (password.Length > 32 || password.Length < 6)
-                {
-                    Console.WriteLine("Ваш пароль должен содержать от 6 до 32 символов!");
-                }
-                else
-                {
-                    customWrite.writeLine("Аккаунт успешно создан!");
-                    data.createUser(name, password, "true");
-                    string user = data.readUsers(2);
-                    Console.WriteLine(user);
-                }
+                customWrite.writeLine("Минимальная длинна имени 4 символа, максимальная 16!");
+                program.Main();
             }
 
+            //запрос на создание пароля
+            customWrite.write("Пароль для входа: ");
+            string password = Console.ReadLine();
+            //проверка на соответсвие стандартам
+            if (dataChek.chekConditions(password, "minlength;8", "maxlength;32") == false)
+            {
+                customWrite.writeLine("Минимальная длинна пароля 4 символа, максимальная 32!");
+                program.Main();
+            }
+
+
+            //создание пользователя
+            data.createUser(login, name, password);
+            customWrite.writeLine("Пользователь успешно создан!");
         }
 
         private static void deleteAccountCommand()
