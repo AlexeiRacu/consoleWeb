@@ -3,12 +3,11 @@ using visual;
 
 namespace _consoleWeb
 {
-    internal class program
+    class program
     {
-        static void Main()
+        public static void Main() 
         {
             Console.ForegroundColor = ConsoleColor.White;
-            customWrite.writeLine("/help для подсказки");
             while (true)
             {
 
