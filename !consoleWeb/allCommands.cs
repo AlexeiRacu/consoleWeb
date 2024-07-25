@@ -6,7 +6,6 @@ namespace allCommands
 {
     class mainCommands
     {
-        string[] args = { "withoutPromt", "withPromt" };
         public static void identifyCommand(string command)
         {
             command = command.ToLower();
@@ -60,7 +59,6 @@ namespace allCommands
             customWrite.writeLine("Наслаждайтесь эффективностью и простотой социальной сети !console");
             customWrite.writeLine("/mainСommands - Показать все доступные команды и их описание");
         }
-
         private static void mainCommandsCommand()
         {
             customWrite.writeLine("/reSpeed - Изменить скорость вывода текста в консоль");
@@ -74,25 +72,24 @@ namespace allCommands
             customWrite.writeLine("/me - Просмотреть профиль");
             customWrite.writeLine("/changeMe - Изменить профиль");
         }
-
         private static void registerCommand()
         {
 
             //запрос на создание логина
             customWrite.write("Логин для входа: ");
-            string login = Console.ReadLine();
+            string login = Console.ReadLine().ToLower();
             //проверка на соответсвие стандартам
-            if (dataChek.chekConditions(login, "minlength;4", "maxlength;16", "uniq;login"))
+            if (dataChek.chekConditions(login, "minLength;4", "maxLength;16", "uniq;login", "anyLangEx;en"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к логину пользователя:");
-                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tДолжен быть уникальным для каждого пользователя");
+                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tДолжен быть уникальным для каждого пользователя\n\tМожет состаять только из латинских букв и цифр");
                 program.Main();
             }
             //запрос на создание имени профиля
             customWrite.write("Имя профиля: ");
             string name = Console.ReadLine();
             //проверка на соответсвие стандартам
-            if (dataChek.chekConditions(name, "minlength;4", "maxlength;16"))
+            if (dataChek.chekConditions(name, "minLength;4", "maxLength;16"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к имени пользователя:");
                 customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов");
@@ -115,42 +112,34 @@ namespace allCommands
             data.createUser(login, name, password);
             customWrite.writeLine("Пользователь успешно создан!");
         }
-
         private static void deleteAccountCommand()
         {
             // Логика для команды DeleteAccount
         }
-
         private static void loginCommand()
         {
             // Логика для команды Login
         }
-
         private static void logoutCommand()
         {
             // Логика для команды Logout
         }
-
         private static void loadPageCommand()
         {
             // Логика для команды LoadPage
         }
-
         private static void createContentCommand()
         {
             // Логика для команды CreateContent
         }
-
         private static void deleteContentCommand()
         {
             // Логика для команды DeleteContent
         }
-
         private static void viewProfileCommand()
         {
             // Логика для команды ViewProfile
         }
-
         private static void changeProfileCommand()
         {
             // Логика для команды ChangeProfile
