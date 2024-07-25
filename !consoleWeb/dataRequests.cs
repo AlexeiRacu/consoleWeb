@@ -1,4 +1,5 @@
 using Npgsql;
+using System.Text.RegularExpressions;
 namespace dataRequests
 {
     class data
@@ -101,10 +102,9 @@ namespace dataRequests
     }
     class dataChek
     {
+
         public static bool chekConditions(string user_data, params string[] parameter)
         {
-            bool isCheckPassed = false; // Начальное состояние успешного прохождения проверки
-
             for (int i = 0; i < parameter.Length; i++)
             {
                 string[] parts = parameter[i].Split(';');
@@ -115,15 +115,13 @@ namespace dataRequests
                     case "maxlength":
                         if (user_data.Length > int.Parse(value))
                         {
-                            isCheckPassed = true;
-                            return isCheckPassed;
+                            return true;
                         }
                         break;
                     case "minlength":
                         if (user_data.Length < int.Parse(value))
                         {
-                            isCheckPassed = true;
-                            return isCheckPassed;
+                            return true;
                         }
                         break;
                     case "uniq":
@@ -132,20 +130,53 @@ namespace dataRequests
                             case "login":
                                 if (user_data == data.readUsers(user_data, "01000"))
                                 {
-                                    isCheckPassed = true;
+                                    return true;
                                 }
                                 break;
                             default:
                                 break;
                         }
-                        break; // Завершение метки "uniq"
+                        break;
+                    case "anylangex":
+                        switch (value) 
+                        {
+                            case "en":
+                                if(IsEnglish(user_data))
+                                    return false;
+                                else
+                                    return true;
+                            case "ru":
+                                if (IsRussian(user_data))
+                                    return false;
+                                else
+                                    return true;
+                            case "china":
+                                if (IsChinese(user_data))
+                                    return false;
+                                else
+                                    return true;
+                        }
+                    break;
                     default:
                         return false;
                 }
             }
 
-            return isCheckPassed; // Возвращаем результат проверки всех условий
+            return false;
         }
+        private static bool IsEnglish(string input)
+        {
+            return Regex.IsMatch(input, @"^[a-zA-Z0-9\s\-.,]+$");
+        }
+        private static bool IsRussian(string input)
+        {
+            return Regex.IsMatch(input, @"[\u0400-\u04FF]+");
+        }
+        private static bool IsChinese(string input)
+        {
+            return Regex.IsMatch(input, @"[\u4e00-\u9fff]+");
+        }
+
 
     }
 }
