@@ -8,7 +8,6 @@ namespace allCommands
     {
         public static void identifyCommand(string command)
         {
-            command = command.ToLower();
             switch (command)
             {
                 case "/respeed":
@@ -74,41 +73,39 @@ namespace allCommands
         }
         private static void registerCommand()
         {
-
-            //запрос на создание логина
+            // запрос на создание логина
             customWrite.write("Логин для входа: ");
-            string login = Console.ReadLine().ToLower();
-            //проверка на соответсвие стандартам
-            if (dataChek.chekConditions(login, "minLength;4", "maxLength;16", "uniq;login", "anyLangEx;en"))
+            string login = Console.ReadLine().ToLower().TrimEnd(' ');
+            // проверка на соответствие стандартам
+            if (dataChek.chekFalseConditions(login, "minLength;4", "maxLength;16", "lang;en") || dataChek.chekFalseConditions(login, "hasnotspacechar;0"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к логину пользователя:");
-                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tДолжен быть уникальным для каждого пользователя\n\tМожет состаять только из латинских букв и цифр");
+                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tДолжен быть уникальным для каждого пользователя\n\tМожет состаять только из латинских букв и цифр\n\tНе может содержать в себе пробел(ы)");
                 program.Main();
             }
-            //запрос на создание имени профиля
+            // запрос на создание имени профиля
             customWrite.write("Имя профиля: ");
-            string name = Console.ReadLine();
-            //проверка на соответсвие стандартам
-            if (dataChek.chekConditions(name, "minLength;4", "maxLength;16"))
+            string name = Console.ReadLine().Trim(' ');
+            // проверка на соответствие стандартам
+            if (dataChek.chekFalseConditions(name, "minLength;4", "maxLength;16", "hasnotspacechar;0"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к имени пользователя:");
-                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов");
+                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tНе может содержать в себе пробел(ы)");
                 program.Main();
             }
 
-            //запрос на создание пароля
+            // запрос на создание пароля
             customWrite.write("Пароль для входа: ");
-            string password = Console.ReadLine();
-            //проверка на соответсвие стандартам
-            if (dataChek.chekConditions(password, "minlength;8", "maxlength;32"))
+            string password = Console.ReadLine().TrimEnd(' ');
+            // проверка на соответствие стандартам
+            if (dataChek.chekFalseConditions(password, "minlength;8", "maxlength;32", "specialChar;1", "hasNotSpaceChar;0"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к паролю пользователя:");
-                customWrite.writeLine("\tМинимальная длинна 8 символов\n\tМаксимальная длинна 32 символов");
+                customWrite.writeLine("\tМинимальная длинна 8 символов\n\tМаксимальная длинна 32 символов\n\tДолжен содержать минимум 1 спецсимвол\n\tНе может содержать в себе пробел(ы)");
                 program.Main();
             }
 
-
-            //создание пользователя
+            // создание пользователя
             data.createUser(login, name, password);
             customWrite.writeLine("Пользователь успешно создан!");
         }
