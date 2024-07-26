@@ -102,8 +102,15 @@ namespace dataRequests
     }
     class dataChek
     {
+        public static void jj(params string[] parameter)
+        {
+            for (int i = 0; i < parameter.Length; i++)
+            {
+                Console.WriteLine(parameter[i]);
+            }
+        }
 
-        public static bool chekConditions(string user_data, params string[] parameter)
+        public static bool chekFalseConditions(string user_data, params string[] parameter)
         {
             for (int i = 0; i < parameter.Length; i++)
             {
@@ -113,13 +120,13 @@ namespace dataRequests
                 switch (key)
                 {
                     case "maxlength":
-                        if (user_data.Length > int.Parse(value))
+                        if (user_data.Length > byte.Parse(value))
                         {
                             return true;
                         }
                         break;
                     case "minlength":
-                        if (user_data.Length < int.Parse(value))
+                        if (user_data.Length < byte.Parse(value))
                         {
                             return true;
                         }
@@ -137,46 +144,48 @@ namespace dataRequests
                                 break;
                         }
                         break;
-                    case "anylangex":
-                        switch (value) 
+                    case "lang":
+                        switch (value)
                         {
                             case "en":
-                                if(IsEnglish(user_data))
+                                if (Regex.IsMatch(user_data, @"^[a-zA-Z0-9\s\-.,]+$"))
                                     return false;
                                 else
                                     return true;
                             case "ru":
-                                if (IsRussian(user_data))
+                                if (Regex.IsMatch(user_data, @"[\u0400-\u04FF]+"))
                                     return false;
                                 else
                                     return true;
                             case "china":
-                                if (IsChinese(user_data))
+                                if (Regex.IsMatch(user_data, @"[\u4e00-\u9fff]+"))
                                     return false;
                                 else
                                     return true;
                         }
-                    break;
-                    default:
-                        return false;
+                        break;
+                    case "specialchar":
+                        byte specialCharCount = (byte)Regex.Count(user_data, @"[^a-zA-Z0-9 ]+");
+                        if (specialCharCount >= byte.Parse(value))
+                            return false;
+                        else
+                            return true;
+                    case "hasnotspecialchar":
+                        specialCharCount = (byte)Regex.Count(user_data, @"[^a-zA-Z0-9 ]+");
+                        if (specialCharCount > byte.Parse(value))
+                            return true;
+                        else
+                            return false;
+                    case "hasnotspacechar":
+                        byte spaceCharCount = (byte)Regex.Count(user_data, @"\s");
+                        if (spaceCharCount > byte.Parse(value))
+                            return true;
+                        else
+                            return false;
                 }
             }
-
+            // Проверка на то, что все параметры были обработаны
             return false;
         }
-        private static bool IsEnglish(string input)
-        {
-            return Regex.IsMatch(input, @"^[a-zA-Z0-9\s\-.,]+$");
-        }
-        private static bool IsRussian(string input)
-        {
-            return Regex.IsMatch(input, @"[\u0400-\u04FF]+");
-        }
-        private static bool IsChinese(string input)
-        {
-            return Regex.IsMatch(input, @"[\u4e00-\u9fff]+");
-        }
-
-
     }
 }
