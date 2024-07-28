@@ -106,7 +106,7 @@ namespace allCommands
             }
 
             // создание пользователя
-            data.createUser(login, name, password);
+            dataRequest.createUser(login, name, password);
             customWrite.writeLine("Пользователь успешно создан!");
         }
         private static void deleteAccountCommand()
@@ -115,11 +115,23 @@ namespace allCommands
         }
         private static void loginCommand()
         {
-            // Логика для команды Login
+            customWrite.write("Логин для входа: ");
+            string login = Console.ReadLine().ToLower().TrimEnd(' ');
+            customWrite.write("Пароль для входа: ");
+            string password = Console.ReadLine().TrimEnd(' ');
+            if (login + ", " + password != dataRequest.readUsers(login, "01010"))
+            {
+                customWrite.writeLine("Неверный логин или пароль!");
+            }
+            else
+            {
+                dataRequest.loginUser(login);
+                customWrite.writeLine("Вы успешно авторизировались как " + login + "!");
+            }
         }
         private static void logoutCommand()
         {
-            // Логика для команды Logout
+            dataRequest.logoutUser();
         }
         private static void loadPageCommand()
         {
