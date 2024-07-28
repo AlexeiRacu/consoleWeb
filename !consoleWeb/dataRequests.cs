@@ -2,10 +2,11 @@ using Npgsql;
 using System.Text.RegularExpressions;
 namespace dataRequests
 {
-    class data
+    class dataRequest
     {
         static readonly string conString = "Host=127.0.0.1;Port=5432;Database=postgres;Username=postgres;Password=1510;Timeout=10;SslMode=Prefer";
 
+        private static string user = "";
 
         public static string readUsers(int user_id, string chooseInfo = "11111")
         {
@@ -98,18 +99,17 @@ namespace dataRequests
             cmd.ExecuteNonQuery();
         }
 
-
+        public static void loginUser(string login)
+        {
+            user = login;
+        }
+        public static void logoutUser()
+        {
+            user = "";
+        }
     }
     class dataChek
     {
-        public static void jj(params string[] parameter)
-        {
-            for (int i = 0; i < parameter.Length; i++)
-            {
-                Console.WriteLine(parameter[i]);
-            }
-        }
-
         public static bool chekFalseConditions(string user_data, params string[] parameter)
         {
             for (int i = 0; i < parameter.Length; i++)
@@ -135,7 +135,7 @@ namespace dataRequests
                         switch (value)
                         {
                             case "login":
-                                if (user_data == data.readUsers(user_data, "01000"))
+                                if (user_data == dataRequest.readUsers(user_data, "01000"))
                                 {
                                     return true;
                                 }
@@ -184,7 +184,6 @@ namespace dataRequests
                             return false;
                 }
             }
-            // Проверка на то, что все параметры были обработаны
             return false;
         }
     }
