@@ -22,10 +22,16 @@ namespace allCommands
                 case "/reg":
                     registerCommand();
                     break;
+                case "/registr":
+                    registerCommand();
+                    break;
                 case "/bye":
                     deleteAccountCommand();
                     break;
                 case "/log":
+                    loginCommand();
+                    break;
+                case "/login":
                     loginCommand();
                     break;
                 case "/logout":
@@ -77,7 +83,7 @@ namespace allCommands
             customWrite.write("Логин для входа: ");
             string login = Console.ReadLine().ToLower().TrimEnd(' ');
             // проверка на соответствие стандартам
-            if (dataChek.chekFalseConditions(login, "minLength;4", "maxLength;16", "lang;en") || dataChek.chekFalseConditions(login, "hasnotspacechar;0"))
+            if (dataCheck.chekFalseConditions(login, "minLength;4", "maxLength;16","uniq;login", "lang;en") || dataCheck.chekFalseConditions(login, "hasNotSpaceChar;0", "hasNotSpecialChar"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к логину пользователя:");
                 customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tДолжен быть уникальным для каждого пользователя\n\tМожет состаять только из латинских букв и цифр\n\tНе может содержать в себе пробел(ы)");
@@ -87,7 +93,7 @@ namespace allCommands
             customWrite.write("Имя профиля: ");
             string name = Console.ReadLine().Trim(' ');
             // проверка на соответствие стандартам
-            if (dataChek.chekFalseConditions(name, "minLength;4", "maxLength;16", "hasnotspacechar;0"))
+            if (dataCheck.chekFalseConditions(name, "minLength;4", "maxLength;16", "hasnotspacechar;0"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к имени пользователя:");
                 customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tНе может содержать в себе пробел(ы)");
@@ -98,7 +104,7 @@ namespace allCommands
             customWrite.write("Пароль для входа: ");
             string password = Console.ReadLine().TrimEnd(' ');
             // проверка на соответствие стандартам
-            if (dataChek.chekFalseConditions(password, "minlength;8", "maxlength;32", "specialChar;1", "hasNotSpaceChar;0"))
+            if (dataCheck.chekFalseConditions(password, "minlength;8", "maxlength;32", "specialChar;1", "hasNotSpaceChar;0"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к паролю пользователя:");
                 customWrite.writeLine("\tМинимальная длинна 8 символов\n\tМаксимальная длинна 32 символов\n\tДолжен содержать минимум 1 спецсимвол\n\tНе может содержать в себе пробел(ы)");
@@ -139,7 +145,29 @@ namespace allCommands
         }
         private static void createContentCommand()
         {
-            // Логика для команды CreateContent
+            if (dataRequest.cheсkUserStatus())
+            {
+                customWrite.write("Содержимое поста: ");
+                string text = Console.ReadLine();
+                if (dataCheck.chekFalseConditions(text, "maxLength;8192"))
+                {
+                    Console.WriteLine("Максимальная длинна текста 8192 символа!");
+                    program.Main();
+                }
+                customWrite.write("Название поста: ");
+                string title = Console.ReadLine();
+                if (dataCheck.chekFalseConditions(text, "maxLengh;128"))
+                {
+                    Console.WriteLine("Максимальная длинна текста 128 символов!");
+                    program.Main();
+                }
+                dataRequest.createPost(title,text);
+                customWrite.writeLine("Пост успешно опубликован!");
+            }
+            else
+            {
+                customWrite.writeLine("Чтобы делиться контентом, войдите в аккаунт!");
+            }
         }
         private static void deleteContentCommand()
         {
