@@ -141,7 +141,7 @@ namespace allCommands
         }
         private static void loadPageCommand()
         {
-            // Логика для команды LoadPage
+            customWrite.writeLine(dataRequest.postParse(4, "new"));
         }
         private static void createContentCommand()
         {
