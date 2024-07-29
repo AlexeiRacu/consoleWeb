@@ -1,4 +1,5 @@
 using Npgsql;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 namespace dataRequests
 {
@@ -48,7 +49,6 @@ namespace dataRequests
                 return "Несуществующий пользователь!";
             }
         }
-
         public static string readUsers(string user_login, string chooseInfo = "11111")
         {
             var connect = new NpgsqlConnection(conString);
@@ -89,7 +89,6 @@ namespace dataRequests
                 return "Несуществующий пользователь!";
             }
         }
-
         public static void createUser(string login, string name, string password, string root = "false")
         {
             var connect = new NpgsqlConnection(conString);
@@ -98,7 +97,6 @@ namespace dataRequests
             cmd.CommandText = $"INSERT INTO users (user_login, user_name, user_password, user_root) VALUES('{login}','{name}', '{password}', {(root.ToLower())})";
             cmd.ExecuteNonQuery();
         }
-
         public static void loginUser(string login)
         {
             user = login;
@@ -107,8 +105,24 @@ namespace dataRequests
         {
             user = "";
         }
+        public static bool cheсkUserStatus()
+        {
+            return user.Length == 0 ? false : true; 
+        }
+        public static void createPost(string title, string text)
+        {
+            if (user.Length != 0)
+            {
+                var connect = new NpgsqlConnection(conString);
+                connect.Open();
+                var cmd = connect.CreateCommand();
+                cmd.CommandText = $"INSERT INTO posts(fk_user_id, fk_user_login, post_title, post_text) VALUES((SELECT user_id FROM users WHERE user_login = '{user}'),'{user}','{title}','{text}')";
+                cmd.ExecuteNonQuery();
+            }
+        }
+
     }
-    class dataChek
+    class dataCheck
     {
         public static bool chekFalseConditions(string user_data, params string[] parameter)
         {
@@ -120,13 +134,13 @@ namespace dataRequests
                 switch (key)
                 {
                     case "maxlength":
-                        if (user_data.Length > byte.Parse(value))
+                        if (user_data.Length > uint.Parse(value))
                         {
                             return true;
                         }
                         break;
                     case "minlength":
-                        if (user_data.Length < byte.Parse(value))
+                        if (user_data.Length < uint.Parse(value))
                         {
                             return true;
                         }
