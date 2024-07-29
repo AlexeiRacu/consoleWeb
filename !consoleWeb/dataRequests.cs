@@ -1,5 +1,6 @@
 using Npgsql;
 using System.Collections.Generic;
+using System.Data;
 using System.Text.RegularExpressions;
 namespace dataRequests
 {
@@ -119,6 +120,49 @@ namespace dataRequests
                 cmd.CommandText = $"INSERT INTO posts(fk_user_id, fk_user_login, post_title, post_text) VALUES((SELECT user_id FROM users WHERE user_login = '{user}'),'{user}','{title}','{text}')";
                 cmd.ExecuteNonQuery();
             }
+        }
+    public static string postParse(uint count, string parameter)
+        {
+            var connect = new NpgsqlConnection(conString);
+            connect.Open();
+            string post = "";
+            switch (parameter)
+            {
+                case "new":
+                    {
+                        count = getLastPostId() > count ? count : getLastPostId();
+
+                        for (uint i = getLastPostId(); i > getLastPostId() - count; i--)
+                        {
+                            using (var cmd = new NpgsqlCommand($"SELECT post_title, post_text FROM posts WHERE post_id = {i}", connect))
+                            {
+                                using (var reader = cmd.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        post += $"Название: {reader["post_title"]}\nСодержимое:{reader["post_text"]}\n";
+                                    }
+                                }
+                            }
+                        }
+
+                        return post;
+                    }
+                default:
+                    return "Постов не найдено";
+            }
+        }
+
+    private static uint getLastPostId()
+        {
+            var connect = new NpgsqlConnection(conString);
+            connect.Open();
+            var cmd = connect.CreateCommand();
+            cmd.CommandText = "SELECT MAX(post_id) FROM posts";
+            uint lastPostId = Convert.ToUInt32(cmd.ExecuteScalar());
+            connect.Close();
+
+            return lastPostId;
         }
 
     }
