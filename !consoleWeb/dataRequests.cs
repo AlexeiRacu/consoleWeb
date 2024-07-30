@@ -121,39 +121,29 @@ namespace dataRequests
                 cmd.ExecuteNonQuery();
             }
         }
-    public static string postParse(uint count, string parameter)
+        public static string[,] getPostsByDescendingId(uint count)
         {
             var connect = new NpgsqlConnection(conString);
             connect.Open();
-            string post = "";
-            switch (parameter)
+            count = getLastPostId() > count ? count : getLastPostId();
+            string[,] post = new string[count, 2];
+            for (uint i = getLastPostId(); i > getLastPostId() - count; i--)
             {
-                case "new":
-                    {
-                        count = getLastPostId() > count ? count : getLastPostId();
-
-                        for (uint i = getLastPostId(); i > getLastPostId() - count; i--)
-                        {
-                            using (var cmd = new NpgsqlCommand($"SELECT post_title, post_text FROM posts WHERE post_id = {i}", connect))
-                            {
-                                using (var reader = cmd.ExecuteReader())
-                                {
-                                    if (reader.Read())
-                                    {
-                                        post += $"Название: {reader["post_title"]}\nСодержимое:{reader["post_text"]}\n";
-                                    }
-                                }
-                            }
-                        }
-
-                        return post;
-                    }
-                default:
-                    return "Постов не найдено";
+                NpgsqlCommand cmd = new NpgsqlCommand($"SELECT post_title, post_text FROM posts WHERE post_id = {i}", connect);
+                NpgsqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    post[getLastPostId() - i, 0] = $"{reader["post_title"]}";
+                    post[getLastPostId() - i, 1] = $"{reader["post_text"]}";
+                }
+                reader.Close();
             }
+            return post;
         }
 
-    private static uint getLastPostId()
+
+
+        private static uint getLastPostId()
         {
             var connect = new NpgsqlConnection(conString);
             connect.Open();
@@ -240,6 +230,20 @@ namespace dataRequests
                             return true;
                         else
                             return false;
+                    case "onlyinteger":
+                        {
+                            int noIntegerCount = Regex.Count(user_data, @"[^0-9 ]+");
+                            if (noIntegerCount > byte.Parse(value))
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+
+
                 }
             }
             return false;
