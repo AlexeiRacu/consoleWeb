@@ -38,7 +38,7 @@ namespace allCommands
                     logoutCommand();
                     break;
                 case "/load":
-                    loadPageCommand();
+                    loadPageCommand(command);
                     break;
                 case "/contentcreate":
                     createContentCommand();
@@ -71,7 +71,8 @@ namespace allCommands
             customWrite.writeLine("/bye - Удалить аккаунт");
             customWrite.writeLine("/log - Войти в систему");
             customWrite.writeLine("/logout - Выйти из системы");
-            customWrite.writeLine("/load - Загрузить страницу");
+            customWrite.writeLine("/loadNew - Загрузить страницу с последними постами");
+            customWrite.writeLine("/loadSinceTo - Загрузить страницу с точки до точки");
             customWrite.writeLine("/contentCreate - Создать контент");
             customWrite.writeLine("/contentDelete - Удалить контент");
             customWrite.writeLine("/me - Просмотреть профиль");
@@ -139,9 +140,21 @@ namespace allCommands
         {
             dataRequest.logoutUser();
         }
-        private static void loadPageCommand()
+        private static void loadPageCommand(string parameter)
         {
-            customWrite.writeLine(dataRequest.postParse(4, "new"));
+            customWrite.write("Выберите количество постов: ");
+            string tryVideoCount = Console.ReadLine().TrimEnd();
+            if (dataCheck.chekFalseConditions(tryVideoCount, "onlyInteger;0"))
+            {
+                customWrite.writeLine("Введено нечисловое значение!");
+                program.Main();
+            }
+            uint VideoCount = uint.Parse(tryVideoCount);
+            string[,] posts = dataRequest.getPostsByDescendingId(4);
+            for (int i = 0; i < posts.GetLength(0); i++)
+            {
+                customWrite.writeLine($"Заголовок: {posts[i, 0]}\nТекст: {posts[i,1]}");
+            }
         }
         private static void createContentCommand()
         {
