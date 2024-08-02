@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using _consoleWeb;
 
 namespace visual
 {
@@ -40,6 +41,15 @@ namespace visual
         {
             for (int i = 0; i < request.Length; i++)
             {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    if (key.Key == ConsoleKey.Spacebar)
+                    {
+                        Console.Write(request.Substring(i));
+                        break;
+                    }
+                }
                 Thread.Sleep(timeSleep);
                 Console.Write(request[i]);
             }
@@ -48,6 +58,15 @@ namespace visual
         {
             for (int i = 0; i < request.Length; i++)
             {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    if (key.Key == ConsoleKey.Spacebar)
+                    {
+                        Console.Write(request.Substring(i));
+                        break;
+                    }
+                }
                 Thread.Sleep(timeSleep);
                 Console.Write(request[i]);
             }
