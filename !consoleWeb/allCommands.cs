@@ -8,7 +8,7 @@ namespace allCommands
     {
         public static void identifyCommand(string command)
         {
-            switch (command)
+            switch (command.ToLower())
             {
                 case "/respeed":
                     reSpeedCommand();
@@ -84,7 +84,7 @@ namespace allCommands
             customWrite.write("Логин для входа: ");
             string login = Console.ReadLine().ToLower().TrimEnd(' ');
             // проверка на соответствие стандартам
-            if (dataCheck.chekFalseConditions(login, "minLength;4", "maxLength;16","uniq;login", "lang;en") || dataCheck.chekFalseConditions(login, "hasNotSpaceChar;0", "hasNotSpecialChar"))
+            if (dataCheck.chekFalseConditions(login, "minLength;4", "maxLength;16", "uniq;login", "lang;en") || dataCheck.chekFalseConditions(login, "hasNotSpaceChar;0", "hasNotSpecialChar"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к логину пользователя:");
                 customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tДолжен быть уникальным для каждого пользователя\n\tМожет состаять только из латинских букв и цифр\n\tНе может содержать в себе пробел(ы)");
@@ -153,7 +153,7 @@ namespace allCommands
             string[,] posts = dataRequest.getPostsByDescendingId(4);
             for (int i = 0; i < posts.GetLength(0); i++)
             {
-                customWrite.writeLine($"Заголовок: {posts[i, 0]}\nТекст: {posts[i,1]}");
+                customWrite.writeLine($"Заголовок: {posts[i, 0]}\nТекст: {posts[i, 1]}");
             }
         }
         private static void createContentCommand()
@@ -174,7 +174,7 @@ namespace allCommands
                     Console.WriteLine("Максимальная длинна текста 128 символов!");
                     program.Main();
                 }
-                dataRequest.createPost(title,text);
+                dataRequest.createPost(title, text);
                 customWrite.writeLine("Пост успешно опубликован!");
             }
             else
