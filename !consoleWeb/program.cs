@@ -9,6 +9,7 @@ namespace _consoleWeb
         public static void Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.Unicode;
             Console.ForegroundColor = ConsoleColor.White;
             while (true)
             {
