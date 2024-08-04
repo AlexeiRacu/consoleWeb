@@ -16,7 +16,7 @@
 ### Класс `match`
 
 - **Описание**: *
-- **Методы**: `percentageOfMatch(string title, string search)`
+- **Методы**: `percentageOfMatch`
 
 ### Класс `mainCommands`
 
