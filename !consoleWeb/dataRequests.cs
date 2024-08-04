@@ -6,7 +6,7 @@ namespace dataRequests
 {
     class dataRequest
     {
-        static readonly string conString = "Host=127.0.0.1;Port=5432;Database=postgres;Username=postgres;Password=1510;Timeout=10;SslMode=Prefer";
+        static readonly string conString = "Host=127.0.0.1;Port=5432;Database=postgres;Username=postgres;Password=15101978@alexei;Timeout=10;SslMode=Prefer";
 
         private static string user = "";
 
@@ -108,7 +108,7 @@ namespace dataRequests
         }
         public static bool cheсkUserStatus()
         {
-            return user.Length == 0 ? false : true; 
+            return user.Length == 0 ? false : true;
         }
         public static void createPost(string title, string text)
         {
@@ -126,15 +126,16 @@ namespace dataRequests
             var connect = new NpgsqlConnection(conString);
             connect.Open();
             count = getLastPostId() > count ? count : getLastPostId();
-            string[,] post = new string[count, 2];
+            string[,] post = new string[count, 3];
             for (uint i = getLastPostId(); i > getLastPostId() - count; i--)
             {
-                NpgsqlCommand cmd = new NpgsqlCommand($"SELECT post_title, post_text FROM posts WHERE post_id = {i}", connect);
+                NpgsqlCommand cmd = new NpgsqlCommand($"SELECT post_title, post_text, post_id FROM posts WHERE post_id = {i}", connect);
                 NpgsqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
                     post[getLastPostId() - i, 0] = $"{reader["post_title"]}";
                     post[getLastPostId() - i, 1] = $"{reader["post_text"]}";
+                    post[getLastPostId() - i, 2] = $"{reader["post_id"]}";
                 }
                 reader.Close();
             }
@@ -242,8 +243,6 @@ namespace dataRequests
                                 return false;
                             }
                         }
-
-
                 }
             }
             return false;
