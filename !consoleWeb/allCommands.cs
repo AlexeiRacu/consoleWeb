@@ -62,20 +62,20 @@ namespace allCommands
             customWrite.write("Логин для входа: ");
             string login = Console.ReadLine().ToLower().TrimEnd(' ');
             // проверка на соответствие стандартам
-            if (dataCheck.chekFalseConditions(login, "minLength;4", "maxLength;16", "uniq;login", "lang;en") || dataCheck.chekFalseConditions(login, "hasNotSpaceChar;0", "hasNotSpecialChar"))
+            if (dataCheck.chekFalseConditions(login, "minLength;4", "maxLength;32", "uniq;login", "lang;en") || dataCheck.chekFalseConditions(login, "hasNotSpaceChar;0", "hasNotSpecialChar"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к логину пользователя:");
-                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tДолжен быть уникальным для каждого пользователя\n\tМожет состаять только из латинских букв и цифр\n\tНе может содержать в себе пробел(ы)");
+                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 32 символов\n\tДолжен быть уникальным для каждого пользователя\n\tМожет состаять только из латинских букв и цифр\n\tНе может содержать в себе пробел(ы)");
                 program.Main();
             }
             // запрос на создание имени профиля
             customWrite.write("Имя профиля: ");
             string name = Console.ReadLine().Trim(' ');
             // проверка на соответствие стандартам
-            if (dataCheck.chekFalseConditions(name, "minLength;4", "maxLength;16", "hasnotspacechar;0"))
+            if (dataCheck.chekFalseConditions(name, "minLength;4", "maxLength;32", "hasnotspacechar;0"))
             {
                 customWrite.writeLine("Не удалось создать пользователя!\nОбратите внимание на следущие требования к имени пользователя:");
-                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 16 символов\n\tНе может содержать в себе пробел(ы)");
+                customWrite.writeLine("\tМинимальная длинна 4 символа\n\tМаксимальная длинна 32 символов\n\tНе может содержать в себе пробел(ы)");
                 program.Main();
             }
 
@@ -151,7 +151,9 @@ namespace allCommands
     {
         public static void identifyCommand(string command)
         {
-            switch (command.ToLower())
+            var parametr = command.Split(';');
+            var primaryCommand = parametr[0].Trim().ToLower();
+            switch (primaryCommand.ToLower())
             {
                 case "/help":
                     infoCommand();
@@ -159,24 +161,44 @@ namespace allCommands
                 case "/showcommands":
                     showCommandsCommand();
                     break;
+                case "/lastposts":
+                    if (parametr.Length == 2 && dataCheck.chekFalseConditions(parametr[1], "onlyinteger;0") == false)
+                    {
+                        
+                        lastPostsCommand(uint.Parse(parametr[1]));
+                    }
+                    else
+                    {
+                        customWrite.writeLine("Некорректный формат команды! Используйте: lastposts;число");
+                    }
+                    break;
                 default:
                     customWrite.writeLine("Несуществующая комманда!");
                     break;
             }
+
         }
-        public static void infoCommand() 
+        private static void infoCommand()
         {
             customWrite.writeLine("Для дальнейшего удобства работы с кодом приложения, было принято добавить в приложение:");
-            customWrite.writeLine("Класс postPageCommands, Метод PostsPage (in namespace Program)");
+            customWrite.writeLine("\tКласс postPageCommands\n\tМетод PostsPage (in namespace Program)");
             customWrite.writeLine("PostsPage позволяет \"удобно\" работать с поиском постов: из рекомендаций, по ссылкам и т.п");
             customWrite.writeLine("/showCommands - Показать все доступные комманды и их описание");
         }
-        public static void showCommandsCommand()
+        private static void showCommandsCommand()
         {
             customWrite.writeLine("/postWhithID;(ID поста) - Показать пост с указанным ID");
-            customWrite.writeLine("/lastsPosts;(количество постов) - Показать указаное количество постов за последнее время");
+            customWrite.writeLine("/lastPosts;(количество постов) - Показать указаное количество постов за последнее время");
             customWrite.writeLine("/postsFromTo;(первый пост),(последний пост) - Показать все посты от начального, до последнего значения");
             customWrite.writeLine("/searchPosts;(название поста),(количество постов) - Показать указаное количество постов с соотвествующим названием");
+        }
+        private static void lastPostsCommand(uint postsCount)
+        {
+            string[,] posts = dataRequest.getPostsByDescendingId(postsCount);
+            for (int i = 0; i < posts.GetLength(0); i++)
+            {
+                customWrite.writeLine($"Заголовок: {posts[i, 0]}\nТекст: {posts[i, 1]}\npostID: {posts[i, 2]}");
+            }
         }
     }
 }
