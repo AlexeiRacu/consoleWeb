@@ -37,7 +37,7 @@ namespace visual
                     break;
             }
         }
-        public static void write(string request)
+        public static void write(string request = "")
         {
             for (int i = 0; i < request.Length; i++)
             {
@@ -54,7 +54,7 @@ namespace visual
                 Console.Write(request[i]);
             }
         }
-        public static void writeLine(string request)
+        public static void writeLine(string request = "")
         {
             for (int i = 0; i < request.Length; i++)
             {
