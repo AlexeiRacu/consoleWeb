@@ -10,73 +10,51 @@ namespace allCommands
         {
             switch (command.ToLower())
             {
-                case "/respeed":
-                    reSpeedCommand();
-                    break;
+
                 case "/help":
-                    infoCommandCommand();
+                    infoCommand();
                     break;
-                case "/maincommands":
-                    mainCommandsCommand();
+                case "/showcommands":
+                    showCommandsCommand();
                     break;
                 case "/reg":
                     registerCommand();
                     break;
-                case "/registr":
-                    registerCommand();
-                    break;
-                case "/bye":
-                    deleteAccountCommand();
-                    break;
                 case "/log":
-                    loginCommand();
-                    break;
-                case "/login":
                     loginCommand();
                     break;
                 case "/logout":
                     logoutCommand();
                     break;
-                case "/load":
-                    loadPageCommand(command);
+                case "/postspage":
+                    program.PostsPage();
                     break;
                 case "/contentcreate":
                     createContentCommand();
                     break;
-                case "/contentdelete":
-                    deleteContentCommand();
-                    break;
-                case "/me":
-                    viewProfileCommand();
-                    break;
-                case "/changeme":
-                    changeProfileCommand();
+                case "/respeed":
+                    reSpeedCommand();
                     break;
                 default:
                     customWrite.writeLine("Несуществующая комманда!");
                     break;
             }
         }
-        private static void infoCommandCommand()
+        private static void infoCommand()
         {
             customWrite.writeLine("Добро пожаловать в социальную сеть !console. Эта сеть была создана для тех, кто ценит минимализм, эффективность и эстетику консольных приложений.");
             customWrite.writeLine("Использование !console требует минимальных усилий, так как все действия выполняются через простые текстовые команды.");
             customWrite.writeLine("Наслаждайтесь эффективностью и простотой социальной сети !console");
-            customWrite.writeLine("/mainСommands - Показать все доступные команды и их описание");
+            customWrite.writeLine("/showСommands - Показать все доступные команды и их описание");
         }
-        private static void mainCommandsCommand()
+        private static void showCommandsCommand()
         {
-            customWrite.writeLine("/reSpeed - Изменить скорость вывода текста в консоль");
             customWrite.writeLine("/reg - Зарегистрироваться");
-            customWrite.writeLine("/bye - Удалить аккаунт");
             customWrite.writeLine("/log - Войти в систему");
             customWrite.writeLine("/logout - Выйти из системы");
-            customWrite.writeLine("/loadNew - Загрузить страницу с последними постами");
-            customWrite.writeLine("/loadSinceTo - Загрузить страницу с точки до точки");
             customWrite.writeLine("/contentCreate - Создать контент");
-            customWrite.writeLine("/contentDelete - Удалить контент");
-            customWrite.writeLine("/me - Просмотреть профиль");
-            customWrite.writeLine("/changeMe - Изменить профиль");
+            customWrite.writeLine("/postsPage - Загрузить страницу просмотра постов");
+            customWrite.writeLine("/reSpeed - Изменить скорость вывода текста в консоль");
         }
         private static void registerCommand()
         {
@@ -116,10 +94,6 @@ namespace allCommands
             dataRequest.createUser(login, name, password);
             customWrite.writeLine("Пользователь успешно создан!");
         }
-        private static void deleteAccountCommand()
-        {
-            // Логика для команды DeleteAccount
-        }
         private static void loginCommand()
         {
             customWrite.write("Логин для входа: ");
@@ -139,22 +113,6 @@ namespace allCommands
         private static void logoutCommand()
         {
             dataRequest.logoutUser();
-        }
-        private static void loadPageCommand(string parameter)
-        {
-            customWrite.write("Выберите количество постов: ");
-            string tryVideoCount = Console.ReadLine().TrimEnd();
-            if (dataCheck.chekFalseConditions(tryVideoCount, "onlyInteger;0"))
-            {
-                customWrite.writeLine("Введено нечисловое значение!");
-                program.Main();
-            }
-            uint VideoCount = uint.Parse(tryVideoCount);
-            string[,] posts = dataRequest.getPostsByDescendingId(4);
-            for (int i = 0; i < posts.GetLength(0); i++)
-            {
-                customWrite.writeLine($"Заголовок: {posts[i, 0]}\nТекст: {posts[i, 1]}");
-            }
         }
         private static void createContentCommand()
         {
@@ -182,23 +140,43 @@ namespace allCommands
                 customWrite.writeLine("Чтобы делиться контентом, войдите в аккаунт!");
             }
         }
-        private static void deleteContentCommand()
-        {
-            // Логика для команды DeleteContent
-        }
-        private static void viewProfileCommand()
-        {
-            // Логика для команды ViewProfile
-        }
-        private static void changeProfileCommand()
-        {
-            // Логика для команды ChangeProfile
-        }
         private static void reSpeedCommand()
         {
             customWrite.write("Выберите скорость (0, fast, normal, slow): ");
             string request = Console.ReadLine().ToLower();
             customWrite.setSpeed(request);
+        }
+    }
+    class postsPageCommands
+    {
+        public static void identifyCommand(string command)
+        {
+            switch (command.ToLower())
+            {
+                case "/help":
+                    infoCommand();
+                    break;
+                case "/showcommands":
+                    showCommandsCommand();
+                    break;
+                default:
+                    customWrite.writeLine("Несуществующая комманда!");
+                    break;
+            }
+        }
+        public static void infoCommand() 
+        {
+            customWrite.writeLine("Для дальнейшего удобства работы с кодом приложения, было принято добавить в приложение:");
+            customWrite.writeLine("Класс postPageCommands, Метод PostsPage (in namespace Program)");
+            customWrite.writeLine("PostsPage позволяет \"удобно\" работать с поиском постов: из рекомендаций, по ссылкам и т.п");
+            customWrite.writeLine("/showCommands - Показать все доступные комманды и их описание");
+        }
+        public static void showCommandsCommand()
+        {
+            customWrite.writeLine("/postWhithID;(ID поста) - Показать пост с указанным ID");
+            customWrite.writeLine("/lastsPosts;(количество постов) - Показать указаное количество постов за последнее время");
+            customWrite.writeLine("/postsFromTo;(первый пост),(последний пост) - Показать все посты от начального, до последнего значения");
+            customWrite.writeLine("/searchPosts;(название поста),(количество постов) - Показать указаное количество постов с соотвествующим названием");
         }
     }
 }
