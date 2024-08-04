@@ -15,7 +15,7 @@
 
 ### Класс `match`
 
-- **Описание**: Вычисляет процент совпадения между двумя строками.
+- **Описание**: *
 - **Методы**: `percentageOfMatch(string title, string search)`
 
 ### Класс `mainCommands`
