@@ -10,7 +10,7 @@ namespace _consoleWeb
         private static int PostsPageCalls = 0;
         public static void Main()
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            Console.OutputEncoding = Encoding.Unicode;
             Console.InputEncoding = Encoding.Unicode;
             Console.ForegroundColor = ConsoleColor.White;
             if(MainCalls == 0)
